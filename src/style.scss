@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import 'atropos/scss';
+
+body{
+    margin: 0px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.Home{
+    width: calc(100vw - 30px);
+    height: 100vh;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    .PlaneGif{
+        width: 200px;
+    }
+
+    h1{
+        margin: 0px;
+        font-size: 30px;
+    }
+
+    h2{
+        margin: 0px;
+        font-size: 20px;
+    }
+
+    h3{
+        margin-top: 50px;
+        font-size: 15px;
+    }
+
+    .Buttons{
+        display: flex;
+        gap: 20px;
+    }
+}
+
+.Register{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+    
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    p{
+        margin: 0px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    .authLogo{
+        width: 150px;
+        position: relative;
+        left: 15px;
+        margin: 0px;
+    }
+
+    .successLogo{
+        width: 150px;
+    }
+
+    h4:hover{
+        cursor: pointer;
+    }
+}
+
+.Login{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+    
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .authLogo{
+        width: 150px;
+        position: relative;
+        left: 15px;
+        margin: 0px;
+    }
+
+    p{
+        margin: 0px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.Checking{
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+    text-align: center;
+
+    .buttons{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .listContainer{
+        width: 100vw;
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 15px;
+        // background-color: #597081;
+        border-radius: 20px;
+        gap: 15px;
+        overflow-y: scroll;
+
+        .OneTicket{
+            background-color: #7ea0b7;
+            width: calc(93vw - 20px);
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            display: flex;
+            flex-direction: row;
+            border-radius: 20px;
+
+            .info{
+                text-align: start;
+                p{
+                    margin: 0px;
+                }
+            }
+        }
+    }
+
+    .ticketContainer{
+        z-index: 15;
+        width: 100vw;
+        height: 100vh;
+        backdrop-filter: blur(10px);
+        position: absolute;
+        // bottom: 13vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .ticket{
+            width: 335px;
+            height: 100vh;
+            align-self: center;
+            justify-self: center;
+            background-image: url(./img/ticket.png);
+            background-size: 335px;
+            background-repeat: no-repeat;
+    
+            p{
+                text-align: start;
+                margin: 0px;
+                color: gray;
+                position: relative;
+                top: 160px;
+                left: 35px;
+            }
+
+            Button{
+                position: relative;
+                top: 300px;
+                left: 0px;
+            }
+        }
+    }
+
+    .BuyModalContainer{
+        z-index: 15;
+        width: 100vw;
+        height: 100dvh;
+        backdrop-filter: blur(10px);
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .BuyModal{
+            background-color: #7ea0b7;
+            width: 80vw;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            box-shadow: 0px 0px 15px 10px rgba(0, 0, 0, 0.3);
+
+            h1{margin: 0px;}
+
+            h4{margin: 0px; margin-top: 15px;}
+
+            p{margin: 0px}
+
+            img{width: 90px; margin: 20px;}
+
+            .Buttons{
+                margin: 10px;
+                display: flex;
+                flex-direction: row;
+                gap: 15px;
+            }
+        }
+    }
+
+}
+
+.ErrorPage{
+    background-color: tomato;
+    width: 100vw;
+    height: 100vh;
+    margin: 0px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+
+    h1{
+        font-size: 50px;
+        margin: 0px;
+    }
+
+    h2{
+        margin: 0px;
+
+        &:hover{
+            cursor: pointer;
+        }
+    }
+
+    img{
+        margin: 0px;
+        width: 150px;
+    }
+}
