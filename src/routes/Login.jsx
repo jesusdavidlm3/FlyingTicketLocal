@@ -1,12 +1,10 @@
 import authLogo from '../img/icons/auth.png'
 import { Button, TextField } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import { context } from '../context/context'
 import { useContext } from 'react'
-import { doc, getDoc } from 'firebase/firestore'
-import { auth } from '../../firebase'
-import { db } from '../../firebase'
+import axios from 'axios'
+import { hash } from '../functions/encrypt'
 
 const Login = () => {
 
@@ -15,16 +13,15 @@ const Login = () => {
 
     async function handleSubmit(e){
         e.preventDefault()
-        const userEmail = e.target[0].value;
-        const userPassword =  e.target[2].value;
+        const data = {
+            email: e.target[0].value,
+            passwordHash: await hash(e.target[2].value)
+        }
 
-        signInWithEmailAndPassword(auth, userEmail, userPassword)
-        .then(async (userCredential) => {
-            const user = userCredential.user;
-            if(user != null){
-                const docRef = doc(db, "users", user.uid);
-                const docSnap = await getDoc(docRef);
-                setUserInfo(docSnap.data())
+        axios.post('http://localhost:3000/api/iniciarSesion', data)
+        .then((response) => {
+            if(response.status == 200){
+                setUserInfo(response.data)
                 navigate('/checking')
             }
         })

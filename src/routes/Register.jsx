@@ -3,31 +3,28 @@ import authLogo from '../img/icons/auth.png'
 import { useState } from 'react'
 import successLogo from '../img/icons/success.png'
 import { useNavigate } from 'react-router-dom'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from 'firebase/firestore'
-import { auth, db } from '../../firebase'
+import axios from 'axios'
+import { hash } from '../functions/encrypt'
 
 const Register = () => {
 
     const [success, setSuccess] = useState(false)
     const navigate = useNavigate()
+    const date = new Date()
 
     async function handleSubmit(e){
         e.preventDefault()
-        const userEmail = e.target[0].value
-        const userRealName = e.target[2].value
-        const userId = e.target[4].value
-        const userPassword = e.target[6].value
-        
-        createUserWithEmailAndPassword(auth, userEmail, userPassword)
-        .then(async (userCredential) => {
-            const user = userCredential.user;
-            if(user != null){
-                await setDoc(doc(db, "users", user.uid), {
-                    name: userRealName,
-                    userId: userId,
-                });
-                setSuccess(true)
+        const data = {
+            id: e.target[4].value,
+            email: e.target[0].value,
+            name: e.target[2].value,
+            passwordHash: await hash(e.target[6].value),
+            passwordDate: date,
+        }
+        axios.post('http://localhost:3000/api/registrar', data)
+        .then((response) => {
+            if(response.status == 200){
+                setSuccess(true);
             }
         })
     }

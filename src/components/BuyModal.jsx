@@ -2,8 +2,6 @@ import { Button } from "@mui/material"
 import { useState, useContext } from "react"
 import successLogo from '../img/icons/success.png'
 import { context } from '../context/context'
-import { collection, addDoc } from 'firebase/firestore'
-import { db } from '../../firebase'
 
 export const BuyModal = ({close, infoVuelo}) => {
 
@@ -12,16 +10,14 @@ export const BuyModal = ({close, infoVuelo}) => {
     const { userInfo } = useContext(context)
 
     async function handleBuy(){
-        const docref = await addDoc(collection(db, "tickets"),{
-            comprador: userInfo.userId,
-            vuelo: infoVuelo.id
-        })
-        if(docref != null){
-            setBought(true)
-            setIdComra(docref.id)
-        }
-
-
+        // const docref = await addDoc(collection(db, "tickets"),{
+        //     comprador: userInfo.userId,
+        //     vuelo: infoVuelo.id
+        // })
+        // if(docref != null){
+        //     setBought(true)
+        //     setIdComra(docref.id)
+        // }
     }
 
     return(

@@ -1,16 +1,15 @@
-import { Button } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import { Ticket } from '../components/Ticket'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useContext } from 'react'
 import { context } from '../context/context'
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
-import { db } from '../../firebase'
-import { useEffect } from 'react'
 import { BuyModal } from '../components/BuyModal'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Checking = () => {
 
-    const { userInfo } = useContext(context)
+    const { userInfo, setUserInfo } = useContext(context)
     const [openTicket, setOpenTicket] = useState(false)
     const [buyTicket, setBuyTicket] = useState(false)
     const [showBuy, setShowBuy] = useState(false)
@@ -21,35 +20,46 @@ const Checking = () => {
     let ticketToGetInfo = []
     const [ticketId, setTicketId] = useState([])
     const [infoVuelo, setInfoVuelo] = useState('')
+    const navigate = useNavigate()
+    const fechaVencida = new Date()
+    const [claveVencida, setClaveVencida] = useState(false)
+    fechaVencida.setMonth(fechaVencida.getMonth() - 1)
+    const today = new Date()
+    console.log(fechaVencida)
 
+    useEffect(() => {
+        if(fechaVencida < userInfo.passWordDate){
+            setClaveVencida(true)
+        }
+    })
 
     async function wannaCheck(){
         setShowBuy(false)
         setShowCheck(true)
 
-        const q = query(collection(db, "tickets"), where("comprador", "==", userInfo.userId));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (doc) => {
-            ticketToGetInfo = [...ticketToGetInfo, doc.data()]
-            setTicketId([...ticketId, doc.id()])
-        });
-        ticketToGetInfo.map( async (ticketInfo) => {
-            const docRef = doc(db, "vuelos", ticketInfo.vuelo);
-            const docSnap = await getDoc(docRef);
-            tickets = [...tickets, {data: docSnap.data(), id: docSnap.id}]
-            setShowTickets2(tickets)
-        } )
+        // const q = query(collection(db, "tickets"), where("comprador", "==", userInfo.userId));
+        // const querySnapshot = await getDocs(q);
+        // querySnapshot.forEach(async (doc) => {
+        //     ticketToGetInfo = [...ticketToGetInfo, doc.data()]
+        //     setTicketId([...ticketId, doc.id()])
+        // });
+        // ticketToGetInfo.map( async (ticketInfo) => {
+        //     const docRef = doc(db, "vuelos", ticketInfo.vuelo);
+        //     const docSnap = await getDoc(docRef);
+        //     tickets = [...tickets, {data: docSnap.data(), id: docSnap.id}]
+        //     setShowTickets2(tickets)
+        // } )
     }
 
     async function wannaBuy(){
         setShowBuy(true)
         setShowCheck(false)
 
-        const querySnapshot = await getDocs(collection(db, 'vuelos'));
-        querySnapshot.forEach((doc) => {
-        tickets = [...tickets, {data: doc.data(), id: doc.id}]
-        });
-        setShowTickets(tickets);
+        // const querySnapshot = await getDocs(collection(db, 'vuelos'));
+        // querySnapshot.forEach((doc) => {
+        // tickets = [...tickets, {data: doc.data(), id: doc.id}]
+        // });
+        // setShowTickets(tickets);
     }
         
 
@@ -63,12 +73,33 @@ const Checking = () => {
         setInfoVuelo(ticketInfo)
     }
 
+    function logOut(){
+        setUserInfo('')
+        navigate('/home')
+    }
+
+    async function changePassword(e){
+        e.preventDefault()
+        const data = {
+            newPassword: e.target[0].value,
+            date: today,
+            userId: userInfo.id,
+        }
+        axios.post('http://localhost:3000/api/changePassword', data)
+        .then((response) => {
+            if(response.status == 200){
+                setClaveVencida(false)
+            }
+        })
+    }
+
     return(
         <div className="Checking">
             <h1>Bienvenido: {userInfo.name}</h1>
             <div className='buttons'>
                 <Button variant='contained' onClick={wannaCheck} >ver tickets</Button>
                 <Button variant='contained' onClick={wannaBuy}>comprar</Button>
+                <Button variant='contained' color='error' onClick={logOut}>Cerrar sesion</Button>
             </div>
 
             { showBuy && <div className='listContainer'>
@@ -101,7 +132,11 @@ const Checking = () => {
 
             { openTicket && <Ticket infoVuelo={infoVuelo} close={openCloseTicket}/> }
             { buyTicket && <BuyModal infoVuelo={infoVuelo} close={openCloseBuy}/> }
-
+            { claveVencida && <form onClick={changePassword}>
+                <h1>Contraseña vencida</h1>
+                <TextField variant='outlined' label='Contraseña nueva'/>
+                <Button>Guardar</Button>
+            </form> }
         </div>
     )
 }
